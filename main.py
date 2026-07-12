@@ -67,7 +67,7 @@ def generate_dashboard():
         df[habit] = df[habit].astype(int)
 
     fig = sp.make_subplots(
-        rows=3, cols=2, 
+        rows=2, cols=3, 
         specs=[
             [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}],
             [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}]

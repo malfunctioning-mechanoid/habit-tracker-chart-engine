@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import dotenv
 import os
+import plotly.subplots as sp
 
 dotenv.load_dotenv()
 
@@ -65,7 +66,62 @@ def generate_dashboard():
     for habit in core_habits:
         df[habit] = df[habit].astype(int)
 
-    print(df)
+    fig = sp.make_subplots(
+        rows=3, cols=2, 
+        specs=[
+            [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}],
+            [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}]
+        ],
+        subplot_titles=core_habits
+    )
+
+    color_palette = {
+        "Make Bed": "blue",
+        "Exercise": "green",
+        "Study": "orange",
+        "Protein": "red",
+        "Reading": "purple",
+        "Wash Face": "cyan"
+    }
+
+    grid_positions = [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3)]
+
+    for idx, habit in enumerate(core_habits):
+        row, col = grid_positions[idx]
+
+        completed_count = df[habit].sum()
+        missed_count = len(df) - completed_count
+
+        fig.add_trace(
+            go.Pie(
+                labels=["Done", "Missed"],
+                values=[completed_count, missed_count],
+                hole=0.5,
+                marker=dict(colors=[color_palette[habit], "lightgray"]),
+                textinfo="percent",
+                hoverinfo="label+value",
+                name=habit
+            ),
+            row=row, col=col
+        )
+
+    fig.update_layout(
+        title=dict(
+            text="Overall Habit Completion Breakdown", 
+            font=dict(size=22, color="#ffffff"),
+            x=0.05, y=0.98
+        ),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        showlegend=False,
+        margin=dict(l=20, r=20, t=80, b=20)
+    )
+
+    for annotation in fig['layout']['annotations']:
+        annotation['font'] = dict(size=14, color='#ffffff')
+
+    fig.write_html("index.html", include_plotlyjs="cdn")
+    print("🚀 Success! Interactive multi-donut 'index.html' dashboard successfully updated.")
 
 if __name__ == "__main__":
     generate_dashboard()

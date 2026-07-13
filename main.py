@@ -111,8 +111,8 @@ def generate_dashboard():
             font=dict(size=22, color="#ffffff"),
             x=0.05, y=0.98
         ),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgb(25,25,25)",
+        plot_bgcolor="rgb(25,25,25)",
         showlegend=False,
         margin=dict(l=20, r=20, t=80, b=20)
     )
